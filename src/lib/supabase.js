@@ -7,6 +7,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase environment variables not set. Please check your .env file.')
 }
 
+// Custom no-op lock: prevents Web Locks API deadlock with React auth listeners
+// The gotrue-js lock can get stuck (especially with React Strict Mode),
+// causing signOut() and other auth calls to hang indefinitely.
+const noOpLock = (_name, _acquireTimeout, fn) => fn()
+
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co',
   supabaseAnonKey || 'placeholder-key',
@@ -15,6 +20,7 @@ export const supabase = createClient(
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
+      lock: noOpLock,
     },
   }
 )

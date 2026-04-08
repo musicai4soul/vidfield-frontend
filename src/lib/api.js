@@ -35,6 +35,7 @@ export const getPlans = () =>
   api.get('/api/payments/plans')
 
 // ─── Payments ─────────────────────────────────────────────────────────────
+// plan_id: 'starter' | 'creator' | 'pro'
 export const createRazorpayOrder = (planId) =>
   api.post('/api/payments/create-order', { plan_id: planId })
 
